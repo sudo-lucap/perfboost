@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "perfboost",
+  "version": "1.0.0",
+  "name": "PerfBoost",
+  "description": "Entity throttling, dynamic sim-distance, aggressive frustum culling, and particle limiting for MC 1.21.1.",
+  "authors": ["You"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/perfboost/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "dev.perfboost.PerfBoost"
+    ]
+  },
+  "mixins": [
+    "perfboost.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "fabric-api": "*",
+    "minecraft": "~1.21.1",
+    "java": ">=21"
+  }
+}

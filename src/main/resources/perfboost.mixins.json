@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "dev.perfboost.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "EntityTickThrottleMixin",
+    "ShouldRenderMixin",
+    "ParticleLimiterMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
