@@ -10,11 +10,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * Injects into {@code EntityRenderer#shouldRender} and replaces the entity's
- * bounding box with a slightly shrunken version before the frustum test.
- * This achieves the "aggressive frustum cull" feature with minimal invasiveness.
- */
 @Mixin(EntityRenderer.class)
 public abstract class ShouldRenderMixin<T extends Entity> {
 
@@ -35,14 +30,14 @@ public abstract class ShouldRenderMixin<T extends Entity> {
         if (shrink <= 0) return;
 
         Box original = entity.getVisibilityBoundingBox();
-        Box shrunken = original.shrink(shrink);
+        Box shrunken = original.shrink(shrink, shrink, shrink);
 
-        // If shrunken box is degenerate, fall back to default behaviour
-        if (shrunken.getXLength() <= 0 || shrunken.getYLength() <= 0 || shrunken.getZLength() <= 0) {
+        if ((shrunken.maxX - shrunken.minX) <= 0 ||
+            (shrunken.maxY - shrunken.minY) <= 0 ||
+            (shrunken.maxZ - shrunken.minZ) <= 0) {
             return;
         }
 
-        boolean visible = frustum.isVisible(shrunken);
-        cir.setReturnValue(visible);
+        cir.setReturnValue(frustum.isVisible(shrunken));
     }
 }
