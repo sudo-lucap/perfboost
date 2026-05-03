@@ -30,7 +30,14 @@ public abstract class ShouldRenderMixin<T extends Entity> {
         if (shrink <= 0) return;
 
         Box original = entity.getVisibilityBoundingBox();
-        Box shrunken = original.shrink(shrink, shrink, shrink);
+        Box shrunken = new Box(
+            original.minX + shrink,
+            original.minY + shrink,
+            original.minZ + shrink,
+            original.maxX - shrink,
+            original.maxY - shrink,
+            original.maxZ - shrink
+        );
 
         if ((shrunken.maxX - shrunken.minX) <= 0 ||
             (shrunken.maxY - shrunken.minY) <= 0 ||
