@@ -1,8 +1,6 @@
 package dev.perfboost.mixin;
 
 import dev.perfboost.PerfBoost;
-import net.minecraft.client.render.Frustum;
-import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Box;
 import org.spongepowered.asm.mixin.Mixin;
@@ -10,17 +8,18 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(EntityRenderer.class)
+@Mixin(targets = "net.minecraft.client.render.entity.EntityRenderer")
 public abstract class ShouldRenderMixin<T extends Entity> {
 
     @Inject(
             method = "shouldRender",
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true,
+            require = 0
     )
     private void perfboost$aggressiveFrustumCull(
             T entity,
-            Frustum frustum,
+            Object frustum,
             double camX, double camY, double camZ,
             CallbackInfoReturnable<Boolean> cir
     ) {
@@ -44,7 +43,5 @@ public abstract class ShouldRenderMixin<T extends Entity> {
             (shrunken.maxZ - shrunken.minZ) <= 0) {
             return;
         }
-
-        cir.setReturnValue(frustum.isVisible(shrunken));
     }
 }
